@@ -5,8 +5,10 @@ import {
 	BeforeInsert,
 	BeforeUpdate,
 	OneToMany,
+	ManyToOne,
 } from 'typeorm';
 import { ProductImage } from './product-image.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -55,6 +57,9 @@ export class Product {
 		eager: true, // solo funciona con el finOneBy no con el queryBuilder
 	})
 	images?: ProductImage[];
+
+	@ManyToOne(() => User, (user) => user.product, { eager: true })
+	user: User;
 
 	@BeforeInsert()
 	checkSlugInsert() {
