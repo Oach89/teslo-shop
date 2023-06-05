@@ -19,7 +19,7 @@ export class AuthService {
 		@InjectRepository(User)
 		private readonly userRepository: Repository<User>,
 		private readonly jwtServices: JwtService,
-	) {}
+	) { }
 	async create(createUserDto: CreateUserDto) {
 		try {
 			const { password, ...userData } = createUserDto;
@@ -65,6 +65,13 @@ export class AuthService {
 		} catch (error) {
 			this.handleDBErrors(error);
 		}
+	}
+
+	async checkAuthStatus(user: User) {
+		return {
+			...user,
+			token: this.getJwtToken({ id: user.id }),
+		};
 	}
 
 	private getJwtToken(payload: JwtPayload) {
